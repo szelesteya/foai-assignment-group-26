@@ -7,7 +7,9 @@
 git clone https://github.com/szelesteya/foai-assignment-group-26.git
 ```
 
-2. Install uv command: [uv installation]
+2. Install uv command
+
+[guide](https://docs.astral.sh/uv/getting-started/installation/)
 
 3. Create virtual environment
 
