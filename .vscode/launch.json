@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Assignment 1",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "simulate_game.py",
+            "cwd": "${workspaceFolder}/competitive_sudoku",
+            "console": "integratedTerminal",
+            "args": [
+                "--first",
+                "team26_A1",
+                "--second",
+                "team26_A1"
+            ]
+        }
+    ]
+}
