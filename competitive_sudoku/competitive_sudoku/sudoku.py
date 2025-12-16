@@ -272,56 +272,6 @@ def parse_sudoku_board(text: str) -> SudokuBoard:
     return result
 
 
-def is_valid_board(board: SudokuBoard) -> bool:
-    """
-    Check whether the given `board` is currently valid:
-    - all non-empty values are within the range [1, N]
-    - no duplicate non-empty values appear in any row, column or region
-
-    Returns True if valid, False otherwise.
-    """
-    N = board.N
-
-    # helper to check duplicates in an iterable of values (ignoring zeros)
-    def _has_duplicate(values: List[int]) -> bool:
-        seen = set()
-        for v in values:
-            if v == SudokuBoard.empty:
-                continue
-            if v < 1 or v > N:
-                return True
-            if v in seen:
-                return True
-            seen.add(v)
-        return False
-
-    # check rows
-    for i in range(N):
-        row_vals = [board.get((i, j)) for j in range(N)]
-        if _has_duplicate(row_vals):
-            return False
-
-    # check columns
-    for j in range(N):
-        col_vals = [board.get((i, j)) for i in range(N)]
-        if _has_duplicate(col_vals):
-            return False
-
-    # check regions
-    m = board.m
-    n = board.n
-    for br in range(0, N, m):
-        for bc in range(0, N, n):
-            block_vals = []
-            for i in range(br, br + m):
-                for j in range(bc, bc + n):
-                    block_vals.append(board.get((i, j)))
-            if _has_duplicate(block_vals):
-                return False
-
-    return True
-
-
 class GameState(object):
     def __init__(
         self,
@@ -386,14 +336,24 @@ class GameState(object):
         """
         Returns the occupied squares of the current player.
         """
-        return self.occupied_squares1 if self.current_player == 1 else self.occupied_squares2
+        return (
+            self.occupied_squares1
+            if self.current_player == 1
+            else self.occupied_squares2
+        )
 
     def player_squares(self) -> Optional[List[Square]]:
         """
         Returns the squares where the current player can play, or None if all squares are allowed.
         """
-        allowed_squares = self.allowed_squares1 if self.current_player == 1 else self.allowed_squares2
-        occupied_squares = self.occupied_squares1 if self.current_player == 1 else self.occupied_squares2
+        allowed_squares = (
+            self.allowed_squares1 if self.current_player == 1 else self.allowed_squares2
+        )
+        occupied_squares = (
+            self.occupied_squares1
+            if self.current_player == 1
+            else self.occupied_squares2
+        )
         N = self.board.N
 
         if allowed_squares is None:
@@ -499,13 +459,21 @@ def print_game_state(game_state: GameState) -> str:
     out.write(f"scores = {game_state.scores}\n")
     out.write(f"current-player = {game_state.current_player}\n")
     if not game_state.is_classic_game():
-        allowed_squares1 = [f"({square[0]},{square[1]})" for square in game_state.allowed_squares1]
+        allowed_squares1 = [
+            f"({square[0]},{square[1]})" for square in game_state.allowed_squares1
+        ]
         out.write(f'allowed-squares1 = {", ".join(allowed_squares1)}\n')
-        allowed_squares2 = [f"({square[0]},{square[1]})" for square in game_state.allowed_squares2]
+        allowed_squares2 = [
+            f"({square[0]},{square[1]})" for square in game_state.allowed_squares2
+        ]
         out.write(f'allowed-squares2 = {", ".join(allowed_squares2)}\n')
-        occupied_squares1 = [f"({square[0]},{square[1]})" for square in game_state.occupied_squares1]
+        occupied_squares1 = [
+            f"({square[0]},{square[1]})" for square in game_state.occupied_squares1
+        ]
         out.write(f'occupied-squares1 = {", ".join(occupied_squares1)}\n')
-        occupied_squares2 = [f"({square[0]},{square[1]})" for square in game_state.occupied_squares2]
+        occupied_squares2 = [
+            f"({square[0]},{square[1]})" for square in game_state.occupied_squares2
+        ]
         out.write(f'occupied-squares2 = {", ".join(occupied_squares2)}\n')
     return out.getvalue()
 
@@ -522,8 +490,12 @@ def pretty_print_game_state(game_state: GameState) -> str:
         out.write(
             f'Player2 allowed squares: {"None (all squares are allowed)" if game_state.allowed_squares2 is None else game_state.allowed_squares2}\n'
         )
-        out.write(f"Player1 occupied squares: {list(sorted(game_state.occupied_squares1))}\n")
-        out.write(f"Player2 occupied squares: {list(sorted(game_state.occupied_squares2))}\n")
+        out.write(
+            f"Player1 occupied squares: {list(sorted(game_state.occupied_squares1))}\n"
+        )
+        out.write(
+            f"Player2 occupied squares: {list(sorted(game_state.occupied_squares2))}\n"
+        )
     return out.getvalue()
 
 
@@ -552,7 +524,9 @@ def generate_random_tuples(N):
     return list(unique_tuples)
 
 
-def allowed_squares(board: SudokuBoard, playmode: str) -> Tuple[List[Square], List[Square]]:
+def allowed_squares(
+    board: SudokuBoard, playmode: str
+) -> Tuple[List[Square], List[Square]]:
     """
     Generates allowed squares for player1 and player2.
     @param board: A SudokuBoard object.
@@ -623,7 +597,9 @@ def parse_game_state(text: str, playmode: str) -> GameState:
         result = []
         items = remove_special_characters(text).strip().split()
         items = [int(item) for item in items]
-        assert len(items) % 3 == 0, "The number of elements in the a move list must be divisible by 3."
+        assert (
+            len(items) % 3 == 0
+        ), "The number of elements in the a move list must be divisible by 3."
         for index in range(0, len(items), 3):
             i, j, value = items[index], items[index + 1], items[index + 2]
             result.append(move_class((i, j), value))
@@ -644,7 +620,9 @@ def parse_game_state(text: str, playmode: str) -> GameState:
             return None
         result = []
         items = remove_special_characters(text).strip().split()
-        assert len(items) % 2 == 0, "The number of elements in the a square list must be divisible by 2."
+        assert (
+            len(items) % 2 == 0
+        ), "The number of elements in the a square list must be divisible by 2."
         items = [int(item) for item in items]
         for index in range(0, len(items), 2):
             i, j = items[index], items[index + 1]

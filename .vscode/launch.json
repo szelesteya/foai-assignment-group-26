@@ -1,7 +1,21 @@
 {
     "configurations": [
         {
-            "name": "Assignment 1",
+            "name": "Play Match",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "play_match.py",
+            "cwd": "${workspaceFolder}/competitive_sudoku",
+            "console": "integratedTerminal",
+            "args": [
+                "random_player",
+                "team26_A1",
+                "--count",
+                "1"
+            ],
+        },
+        {
+            "name": "Simulate Game",
             "type": "debugpy",
             "request": "launch",
             "program": "simulate_game.py",
@@ -9,10 +23,10 @@
             "console": "integratedTerminal",
             "args": [
                 "--first",
-                "team26_A1",
+                "random_player",
                 "--second",
-                "team26_A1"
-            ]
+                "team26_A1",
+            ],
         }
     ]
 }
