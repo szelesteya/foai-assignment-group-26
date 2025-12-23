@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Assignment 1",
+            "name": "Monte Carlo Player",
             "type": "debugpy",
             "request": "launch",
             "program": "simulate_game.py",
@@ -9,9 +9,23 @@
             "console": "integratedTerminal",
             "args": [
                 "--first",
-                "team26_A1",
+                "team26_A2",
                 "--second",
-                "team26_A1"
+                "monte_carlo_player"
+            ]
+        },
+        {
+            "name": "Monte Carlo Player play match",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "simulate_game.py",
+            "cwd": "${workspaceFolder}/competitive_sudoku",
+            "console": "integratedTerminal",
+            "args": [
+                "--first",
+                "team26_A2",
+                "--second",
+                "monte_carlo_player"
             ]
         }
     ]
